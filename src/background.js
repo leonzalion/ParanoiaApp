@@ -54,13 +54,18 @@ function createWindow () {
     }
   });
 
-  socket.emit('connectUser', 'leonzalion');
-  socket.emit('getSchedules', 'leonzalion', function(schedules) {
-    win.webContents.send('setSchedules', schedules);
-  });
+  socket.emit('connectUser', 'leonzalion', function onCompelete() {
+    socket.emit('getSchedules', 'leonzalion', function(schedules) {
+      win.webContents.send('setSchedules', schedules);
+    });
 
-  socket.on('takeScreenshot', async (screenshotWidth) => {
-    return takeScreenshot(screenshotWidth);
+    socket.emit('getScreenshotWidth', 'leonzalion', function(screenshotWidth) {
+      win.webContents.send('setScreenshotWidth', screenshotWidth);
+    });
+
+    socket.on('takeScreenshot', async (screenshotWidth) => {
+      return takeScreenshot(screenshotWidth);
+    });
   });
 
   ipcMain.handle('takeScreenshot', async (event, screenshotWidth) => {

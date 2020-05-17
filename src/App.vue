@@ -90,6 +90,9 @@ export default {
       this.schedules = schedules;
       this.isCalendarReady = true;
     });
+    ipcRenderer.on('setScreenshotWidth', (event, screenshotWidth) => {
+      this.screenshotWidth = screenshotWidth;
+    });
   },
   methods: {
     takeScreenshot() {
