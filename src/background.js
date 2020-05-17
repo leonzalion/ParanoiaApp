@@ -63,7 +63,7 @@ function createWindow () {
       win.webContents.send('setScreenshotWidth', screenshotWidth);
     });
 
-    socket.on('takeScreenshot', async (screenshotWidth) => {
+    socket.on('takeScreenshot', async (room, screenshotWidth) => {
       return takeScreenshot(screenshotWidth);
     });
   });
