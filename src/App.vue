@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>Paranoia</h1>
-    <p>Your room name is "leonzalion".</p>
+    <p>Your room name is <b>leonzalion</b>.</p>
     <calendar
       style="height: 800px;"
       :taskView="false"
@@ -25,7 +25,7 @@
       <button
         type="button"
         @click="takeScreenshot"
-        class="btn btn-primary mt-2"
+        class="btn btn-primary my-2"
       >
         Take Screenshot(s)
       </button>
@@ -35,6 +35,7 @@
         width="400"
         alt="`Screenshot #${index}`"
         :key="index"
+        class="screenshot"
       />
     </div>
   </div>
@@ -114,5 +115,9 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.screenshot {
+  margin: 10px;
 }
 </style>

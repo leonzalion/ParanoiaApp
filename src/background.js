@@ -39,6 +39,7 @@ async function takeScreenshot() {
   }
 
   socket.emit('tookScreenshot', 'leonzalion', base64Screenshots);
+
   win.webContents.send('tookScreenshot', base64Screenshots);
   return base64Screenshots;
 }
