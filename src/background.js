@@ -53,7 +53,11 @@ function createWindow () {
       nodeIntegration: true
     }
   });
+
   socket.emit('connectUser', 'leonzalion');
+  socket.emit('getSchedules', 'leonzalion', function(schedules) {
+    win.webContents.send('setSchedules', schedules);
+  });
 
   socket.on('takeScreenshot', async () => {
     return takeScreenshot();
@@ -70,13 +74,12 @@ function createWindow () {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-    if (!process.env.IS_TEST) win.webContents.openDevTools({mode: 'detach'})
+    // if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol('app');
     // Load the index.html when not in development
     win.loadURL('app://./index.html');
   }
-
 
   win.on('closed', () => {
     win = null;
