@@ -24,7 +24,7 @@
       </button>
       <p v-html="message"></p>
       <vue-slider
-        v-model="value"
+        v-model="screenshotWidth"
         style="margin: 50px 20px 20px"
         :min="5"
         :max="200"
