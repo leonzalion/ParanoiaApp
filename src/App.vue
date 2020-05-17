@@ -78,7 +78,7 @@ export default {
     base64Screenshots: [],
     schedules: [],
     isScheduleLocked: false,
-    isCalendarReady: false,
+    isCalendarReady: true,
     message: '',
     screenshotWidth: 100,
   }),
