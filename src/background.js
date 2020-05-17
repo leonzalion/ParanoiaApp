@@ -19,7 +19,7 @@ let win;
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true, standard: true } }])
 
-async function takeScreenshot() {
+async function takeScreenshot(screenshotWidth) {
   const filedir = path.join(
     app.getPath('appData'),
     'screenshots'
@@ -33,7 +33,7 @@ async function takeScreenshot() {
     const filename = path.join(filedir, `${dateFormat(new Date(), "iosUtcDateTime")}${display.id}.png`);
     await screenshot({ screen: display.id, filename });
     const image = await Jimp.read(filename);
-    image.resize(100, Jimp.AUTO);
+    image.resize(screenshotWidth, Jimp.AUTO);
     const base64 = await image.getBase64Async(Jimp.MIME_JPEG);
     base64Screenshots.push(base64);
   }
@@ -59,16 +59,20 @@ function createWindow () {
     win.webContents.send('setSchedules', schedules);
   });
 
-  socket.on('takeScreenshot', async () => {
-    return takeScreenshot();
+  socket.on('takeScreenshot', async (screenshotWidth) => {
+    return takeScreenshot(screenshotWidth);
   });
 
-  ipcMain.handle('takeScreenshot', async () => {
-    return takeScreenshot();
+  ipcMain.handle('takeScreenshot', async (event, screenshotWidth) => {
+    return takeScreenshot(screenshotWidth);
   });
 
   ipcMain.handle('lockSchedule', function (event, schedules) {
     socket.emit('setSchedules', 'leonzalion', schedules);
+  });
+
+  ipcMain.handle('setScreenshotWidth', function(event, screenshotWidth) {
+    socket.emit('setScreenshotWidth', 'leonzalion', screenshotWidth);
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
