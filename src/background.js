@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 import {app, protocol, BrowserWindow, ipcMain} from 'electron'
 import path from 'path';
@@ -38,7 +38,7 @@ async function takeScreenshot() {
     base64Screenshots.push(base64);
   }
 
-  socket.emit('tookScreenshot', base64Screenshots);
+  socket.emit('tookScreenshot', 'leonzalion', base64Screenshots);
   win.webContents.send('tookScreenshot', base64Screenshots);
   return base64Screenshots;
 }
@@ -52,7 +52,7 @@ function createWindow () {
       nodeIntegration: true
     }
   });
-  socket.emit('connectUser');
+  socket.emit('connectUser', 'leonzalion');
 
   socket.on('takeScreenshot', async () => {
     return takeScreenshot();
@@ -63,18 +63,17 @@ function createWindow () {
   });
 
   ipcMain.handle('lockSchedule', function (event, schedules) {
-    console.log(schedules);
-    socket.emit('setSchedules', schedules);
+    socket.emit('setSchedules', 'leonzalion', schedules);
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
     if (!process.env.IS_TEST) win.webContents.openDevTools({mode: 'detach'})
   } else {
-    createProtocol('app')
+    createProtocol('app');
     // Load the index.html when not in development
-    win.loadURL('app://./index.html')
+    win.loadURL('app://./index.html');
   }
 
 
@@ -88,7 +87,7 @@ app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
-    app.quit()
+    app.quit();
   }
 })
 
@@ -96,7 +95,7 @@ app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (win === null) {
-    createWindow()
+    createWindow();
   }
 })
 
@@ -104,7 +103,7 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  createWindow()
+  createWindow();
 })
 
 // Exit cleanly on request from parent process in development mode.
@@ -112,12 +111,12 @@ if (isDevelopment) {
   if (process.platform === 'win32') {
     process.on('message', data => {
       if (data === 'graceful-exit') {
-        app.quit()
+        app.quit();
       }
     })
   } else {
     process.on('SIGTERM', () => {
-      app.quit()
+      app.quit();
     })
   }
 }

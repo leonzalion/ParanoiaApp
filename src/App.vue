@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <h1>Paranoia</h1>
+    <p>Your room name is "leonzalion".</p>
     <calendar
       style="height: 800px;"
       :taskView="false"
@@ -62,7 +63,6 @@ export default {
   }),
   created() {
     ipcRenderer.on('tookScreenshot', (event, base64Screenshots) => {
-      console.log(base64Screenshots.length);
       this.base64Screenshots = base64Screenshots;
     });
   },
