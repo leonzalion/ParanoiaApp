@@ -12,6 +12,8 @@
       @beforeDeleteSchedule="onBeforeDeleteSchedule"
     />
     <button
+      type="button"
+      class="btn btn-primary mt-2"
       id="lock-schedule"
       :disabled="isScheduleLocked"
       @click="lockSchedule"
@@ -19,7 +21,13 @@
       Lock Schedule
     </button>
     <div id="screenshots">
-      <button @click="takeScreenshot">Take Screenshot(s)</button>
+      <button
+        type="button"
+        @click="takeScreenshot"
+        class="btn btn-primary mt-2"
+      >
+        Take Screenshot(s)
+      </button>
       <img
         v-for="(base64Screenshot, index) in base64Screenshots"
         :src="base64Screenshot"
@@ -36,8 +44,9 @@ import { ipcRenderer } from 'electron';
 import { Calendar } from '@toast-ui/vue-calendar';
 import Vue from 'vue';
 import cuid from 'cuid';
-import 'tui-calendar/dist/tui-calendar.css';
+import dateFormat from 'dateformat';
 
+import 'tui-calendar/dist/tui-calendar.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 
@@ -62,13 +71,17 @@ export default {
       ipcRenderer.invoke('takeScreenshot');
     },
     lockSchedule() {
-      ipcRenderer.invoke('lockSchedule', this.schedules);
+      ipcRenderer.invoke('lockSchedule', this.schedules.map((schedule) => {
+        schedule.start = dateFormat(new Date(schedule.start), 'isoDateTime');
+        schedule.end = dateFormat(new Date(schedule.end), 'isoDateTime');
+        return schedule;
+      }));
     },
     onBeforeCreateSchedule(e) {
       this.schedules.push({
         id: cuid(),
-        start: e.start,
-        end: e.end,
+        start: e.start.toDate(),
+        end: e.end.toDate(),
         title: e.title,
         category: 'time',
       });

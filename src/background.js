@@ -52,6 +52,7 @@ function createWindow () {
       nodeIntegration: true
     }
   });
+  socket.emit('connectUser');
 
   socket.on('takeScreenshot', async () => {
     return takeScreenshot();
@@ -61,7 +62,8 @@ function createWindow () {
     return takeScreenshot();
   });
 
-  ipcMain.handle('lockSchedule', (schedules) => {
+  ipcMain.handle('lockSchedule', function (event, schedules) {
+    console.log(schedules);
     socket.emit('setSchedules', schedules);
   });
 
@@ -102,8 +104,6 @@ app.on('activate', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
-  if (isDevelopment && !process.env.IS_TEST) {
-  }
   createWindow()
 })
 
